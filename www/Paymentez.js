@@ -4,9 +4,10 @@ module.exports = {
     init: function (codeName, secreteKey, environment, success, error) {
         exec(success, error, "Paymentez", "init", [codeName, secreteKey, environment]);
     },
-    addCard: function (firstName, lastName, email, success, error) {
-        exec(success, error, "Paymentez", "addCard", [email, firstName, lastName]);
+    addCard: function (uid, email, success, error) {
+        exec(success, error, "Paymentez", "addCard", [email, uid]);
+    },
+    list: function (uid, sucess, error) {
+        exec(sucess, error, "Paymentez", "listCards", [uid]);
     }
 };
-
-

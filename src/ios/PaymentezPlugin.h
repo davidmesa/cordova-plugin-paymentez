@@ -14,4 +14,6 @@
 
 - (void) addCard:(CDVInvokedUrlCommand *)command;
 
+- (void) listCards: (CDVInvokedUrlCommand *)command;
+
 @end

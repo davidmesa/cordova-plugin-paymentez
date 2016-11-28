@@ -37,12 +37,11 @@
   self.command = command;
 
   NSString* email = [command argumentAtIndex:0];
-  NSString* firstName = [command argumentAtIndex:1];
-  NSString* lastName = [command argumentAtIndex:2];
+  NSString* uid = [command argumentAtIndex:1];
 
   UIViewController *top = [UIApplication sharedApplication].keyWindow.rootViewController;
 
-  [PaymentezSDKClient showAddViewControllerForUser:[NSString stringWithFormat:@"%@ %@", firstName, lastName] email:email presenter:top callback:^(PaymentezSDKError *error, BOOL closed, BOOL added) {
+  [PaymentezSDKClient showAddViewControllerForUser:uid email:email presenter:top callback:^(PaymentezSDKError *error, BOOL closed, BOOL added) {
     CDVPluginResult *pluginResult;
     if(error != nil)
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
@@ -54,6 +53,21 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 
   }];
+}
+
+- (void) listCards: (CDVInvokedUrlCommand *)command {
+  self.command = command;
+
+  NSString* uid = [command argumentAtIndex:0];
+
+  [PaymentezSDKClient listCards:uid callback:^(PaymentezSDKError * error, NSArray<PaymentezCard *> * list) {
+    CDVPluginResult *pluginResult;
+    if(error == nil)
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:list];
+    else
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
+  } ];
+
 }
 
 @end
