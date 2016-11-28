@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cordova-plugin-paymentez" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0" xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Paymentez</name>
+    <js-module name="Paymentez" src="www/Paymentez.js">
+        <clobbers target="cordova.plugins.Paymentez" />
+    </js-module>
+    <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="Paymentez">
+                <param name="ios-package" value="Paymentez" />
+            </feature>
+        </config-file>
+        <header-file src="src/ios/PaymentezPlugin.h" />
+        <source-file src="src/ios/PaymentezPlugin.m" />
+        <framework src="src/ios/PaymentezSDK.framework" custom="true" />
+    </platform>
+</plugin>
