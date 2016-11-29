@@ -62,12 +62,27 @@
 
   [PaymentezSDKClient listCards:uid callback:^(PaymentezSDKError * error, NSArray<PaymentezCard *> * list) {
     CDVPluginResult *pluginResult;
-    if(error == nil)
-      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:list];
+    if(error == nil){
+      NSMutableArray *result = [[NSMutableArray alloc] init];
+      for (int i = 0; i<list.count; i=i+1) {
+        PaymentezCard *newCard = [list objectAtIndex:i];
+        NSDictionary *card = [NSDictionary dictionaryWithObjectsAndKeys:
+                              newCard.cardReference, @"cardReference",
+                              newCard.type, @"type",
+                              newCard.cardHolder, @"cardHolder",
+                              newCard.termination, @"termination",
+                              newCard.expiryMonth, @"expiryMonth",
+                              newCard.expiryYear, @"expiryYear",
+                              newCard.bin, @"bin",nil];
+        [result addObject:card];
+      }
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsArray:result];
+    }
     else
       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
-  } ];
 
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  } ];
 }
 
 @end
