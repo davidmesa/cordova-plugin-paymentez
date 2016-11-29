@@ -85,4 +85,43 @@
   } ];
 }
 
+- (void) debitCard: (CDVInvokedUrlCommand *)command {
+  self.command = command;
+
+  NSString* cardReference = [command argumentAtIndex:0];
+  NSString* productAmount = [command argumentAtIndex:1];
+  NSString* productDescription = [command argumentAtIndex:2];
+  NSString* devReference = [command argumentAtIndex:3];
+  NSString* vat = [command argumentAtIndex:4];
+  NSString* email = [command argumentAtIndex:5];
+  NSString* uid = [command argumentAtIndex:6];
+
+
+  PaymentezDebitParameters *parameters = [[PaymentezDebitParameters alloc] init];
+  parameters.cardReference = cardReference;
+  parameters.productAmount = [productAmount doubleValue];
+  parameters.productDescription = productDescription;
+  parameters.devReference = devReference;
+  parameters.vat = [vat doubleValue];
+  parameters.email = email;
+  parameters.uid = uid;
+
+  [PaymentezSDKClient debitCard:parameters    callback:^(PaymentezSDKError *error, PaymentezTransaction *transaction) {
+    CDVPluginResult *pluginResult;
+    if ( error == nil)
+    {
+      NSDictionary *transResult = [NSDictionary dictionaryWithObjectsAndKeys:
+                            transaction.transactionId, @"transactionId",
+                            transaction.paymentDate, @"paymentDate",
+                            transaction.carrierData, @"carrierData",nil];
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:transResult];
+    }
+    else
+      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
+
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+  }];
+
+}
+
 @end

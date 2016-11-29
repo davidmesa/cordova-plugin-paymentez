@@ -9,5 +9,10 @@ module.exports = {
     },
     list: function (uid, sucess, error) {
         exec(sucess, error, "Paymentez", "listCards", [uid]);
+    },
+    debitCard: function (cardReference, productAmount, productDescription, devReference,
+                         vat, email, uid, success, error) {
+        exec(success, error, "Paymentez", "debitCard", [cardReference, productAmount, productDescription,
+            devReference, vat, email, uid]);
     }
 };
