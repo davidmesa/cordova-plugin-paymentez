@@ -55,6 +55,31 @@
   }];
 }
 
+- (void) verifyByAmount: (CDVInvokedUrlCommand *)command {
+  self.command = command;
+
+  NSString* transactionId = [command argumentAtIndex:0];
+  NSString* uid = [command argumentAtIndex:0];
+  NSString* amount = [command argumentAtIndex:0];
+
+  [PaymentezSDKClient verifyWithAmount:transactionId uid:uid amount:[amount doubleValue] callback:^
+   (PaymentezSDKError * error, NSInteger attemptsRemaining, PaymentezTransaction * transaction) {
+    CDVPluginResult *pluginResult;
+     if(transaction != nil)
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+     else if (attemptsRemaining > 0)
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[NSString stringWithFormat:@"%li", (long)attemptsRemaining]];
+     else if (error != nil)
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:error.description];
+     else
+       pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"Error not identified"];
+
+     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+
+   }];
+
+}
+
 - (void) listCards: (CDVInvokedUrlCommand *)command {
   self.command = command;
 

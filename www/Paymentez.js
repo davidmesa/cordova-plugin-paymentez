@@ -14,5 +14,8 @@ module.exports = {
                          vat, email, uid, success, error) {
         exec(success, error, "Paymentez", "debitCard", [cardReference, productAmount, productDescription,
             devReference, vat, email, uid]);
+    },
+    verifyByAmount: function (transactionId, uid, amount, success, error) {
+        exec(success, error, "Paymentez", "verifyByAmount", [transactionId, uid, amount]);
     }
 };

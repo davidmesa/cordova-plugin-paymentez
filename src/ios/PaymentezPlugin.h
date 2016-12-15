@@ -14,6 +14,8 @@
 
 - (void) addCard:(CDVInvokedUrlCommand *)command;
 
+- (void) verifyByAmount: (CDVInvokedUrlCommand *)command;
+
 - (void) listCards: (CDVInvokedUrlCommand *)command;
 
 - (void) debitCard: (CDVInvokedUrlCommand *)command;
